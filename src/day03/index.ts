@@ -31,7 +31,7 @@ const part1 = (rawInput: string) => {
 }
 
 const part2 = (rawInput: string) => {
-  const input = parseInput(testInput1)
+  const input = parseInput(rawInput)
   let joltage = 0
   input.forEach(bank => {
     joltage += getMaxJoltage(bank)
@@ -41,23 +41,33 @@ const part2 = (rawInput: string) => {
 }
 
 const getMaxJoltage = (bank: string): number => {
-  const batteries = bank.split("").map(bat => +bat)
-  const batteriesOn: number[] = []
-  for (let i = 12; i > 0; i--) {
-    let highestNumber = 0
-    batteries.forEach((bat, index, array) => {
-      const length = array.length
-      if (bat > highestNumber && index < length - i) {
-        highestNumber = bat
-      }
-    })
-    batteriesOn.push(highestNumber)
-  }
-  console.log("Highest numbers:", batteriesOn);
+  console.log(bank);
   
-  const totalSum = batteriesOn.reduce((acc, curr) => curr + acc, 0)
-  return totalSum
+  const batteries = bank.split("").map(bat => +bat)
+  let lastIndex = -1
+  const batteriesWithIndeces = batteries.map((bat, i) => [bat, i].join(":"))
+  const batteriesOn: string[] = []
+  for (let i = 12; i > 0; i--) {
+    const [lower, upper] = getRange(lastIndex, batteries.length, i)
+    const availableBatteries = batteriesWithIndeces.filter((bat, i) => i >= lower && i <= upper)
+    const [highestNumber, index] = availableBatteries.sort((a,b) => +b.split(":")[0] - +a.split(":")[0])[0].split(":")
+    // console.log(`Bound: [${lower} - ${upper}], availableBatteries: ${availableBatteries}, highestNo+index: [${highestNumber}, ${index}]`);
+    
+    batteriesOn.push(highestNumber)
+    lastIndex = +index
+  }
+
+  const wholeNumber = Number(batteriesOn.join(""))
+  console.log(wholeNumber);
+  
+  return wholeNumber
 }
+
+const getRange = (lastIndex: number, length: number, i: number): number[] => {
+  return [lastIndex + 1, length - i]
+}
+
+// correct answer 
 
 run({
   part1: {

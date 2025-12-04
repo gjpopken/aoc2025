@@ -49,13 +49,13 @@
           "357",
           "17398"
         ],
-        "time": 1.24875
+        "time": 1.721737
       },
       "part2": {
-        "solved": false,
-        "result": "359",
+        "solved": true,
+        "result": "172601598658203",
         "attempts": [],
-        "time": 0.245834
+        "time": 55.509639
       }
     },
     {
