@@ -1,3 +1,2 @@
-export const part1 = (input: string[]):number => {
-    
-}
+export var _1=g=>{var h=a(g),i=0;b(h,a=>{var j=d(c(a,""),a=>+a),k=0,l=0;b(j,(a,i,b)=>{var length=b.length;if(a>k&&i!==length-1){k=a;l=i}});var m=j.splice((l||0)+1),n=e(m,(a,b)=>b-a)[0];i+=+f([k,n],"")});return i},_2=g=>{var h=a(g),i=0;b(h,a=>{i+=j(a)});return i};
+var a=b=>b.split("\n"),b=(a,b)=>a.forEach(b),c=(a,b)=>a.split(b),d=(a,b)=>a.map(b),e=(a,b)=>a.sort(b),f=(a,b)=>a.join(b),j=a=>{var k=d(c(a,""),a=>+a),l = -1,m=d(k,(z,i)=>f([z,i],":")),n=[];for(var i=12;i>0;i--){var [a,b]=o(l,k.length,i),p=m.filter((q,i)=>i>=a&&i<=b),[r,s]=c(e(p,(a,b)=>+c(b,":")[0]-+c(a,":")[0])[0],":");n.push(r);l=+s}var t=+f(n,"");return t},o=(a,b,i)=>[a+1,b-i]
