@@ -13,7 +13,7 @@ interface Problem {
 }
 
 const parseInput = (rawInput: string) => {
-  const rows = rawInput.split('\n').map(m => m.split(" ").filter(f => !!f))
+  const rows = rawInput.split("\n").map((m) => m.split(" ").filter((f) => !!f))
   // console.log(rows);
 
   const problems = rows[0].map((col, i, row) => {
@@ -22,15 +22,15 @@ const parseInput = (rawInput: string) => {
       rawColumns.push(rows[j][i])
     }
     return {
-      numbers: rawColumns.filter((_, i) => i < rows.length - 1).map(m => +m),
-      operation: rawColumns[rawColumns.length - 1]
+      numbers: rawColumns.filter((_, i) => i < rows.length - 1).map((m) => +m),
+      operation: rawColumns[rawColumns.length - 1],
     } as Problem
   })
   return problems
 }
 
 const parseInputV2 = (rawInput: string) => {
-  const rows = rawInput.split('\n').map(m => m.split("").reverse().join(""))
+  const rows = rawInput.split("\n").map((m) => m.split("").reverse().join(""))
   // console.log(rows);
 
   return rows
@@ -66,28 +66,61 @@ const part2 = (rawInput: string) => {
   const length = input[0].length
 
   let numberSet: number[] = []
-  for (let i = 0; i < length - 1; i++) {
-    const number = getNumberAtIndex(input.filter((_, i) => i < input.length - 1), i)
+  let number = 0
+  for (let i = 0; i < length; i++) {
+    number = getNumberAtIndex(
+      input.filter((_, i) => i < input.length - 1),
+      i,
+    )
     if (number) {
       numberSet.push(number)
+    } else {
+      problems.push({
+        numbers: numberSet,
+        operation: "+",
+      })
+      numberSet = []
     }
   }
 
-  console.log(problems);
+  problems.push({
+    numbers: numberSet,
+    operation: "+",
+  })
 
+  problems.reverse()
 
-  return
+  const operators = input[input.length - 1]
+    .split("")
+    .filter((f) => f.trim())
+    .reverse() as Operation[]
+  console.log(operators)
+
+  problems.forEach((prob, index) => {
+    problems[index].operation = operators[index]
+  })
+
+  console.log(problems)
+
+  const total = problems.reduce((acc, curr) => {
+    switch (curr.operation) {
+      case "*":
+        return multiplyAll(curr.numbers) + acc
+      case "+":
+        return addAll(curr.numbers) + acc
+    }
+  }, 0)
+
+  return total
 }
 
 const getNumberAtIndex = (input: string[], index: number) => {
   let number = ""
-  console.log(input);
-
-  input.forEach(row => {
+  input.forEach((row) => {
     number += row[index]
   })
-  console.log(number);
-  
+  // console.log(number)
+
   return number ? +number : 0
 }
 
@@ -117,13 +150,5 @@ run({
     solution: part2,
   },
   trimTestInputs: true,
-  onlyTests: true,
+  onlyTests: false,
 })
-
-
-const n = [
-  ['123', '328', '', '51', '64', ''],
-  ['', '45', '64', '', '387', '23', ''],
-  ['', '', '6', '98', '', '215', '314'],
-  ['*', '', '', '+', '', '', '*', '', '', '+']
-]
